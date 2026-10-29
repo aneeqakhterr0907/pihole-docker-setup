@@ -1,0 +1,18 @@
+# PI-HOLE: Gold standard of self-hosted ad-blocking
+services:
+  pihole:
+    container_name: ${CONTAINER_NAME}
+    image: pihole/pihole:${IMAGE_VERSION}
+    ports:
+      - "${TCP_PORT}:53/tcp"
+      - "${UDP_PORT}:53/udp"
+      - "${HTTP_PORT}:80/tcp"
+    environment:
+      - TZ=${MY_TZ}
+      - FTLCONF_webserver_api_password=${WEBPASS}
+      # Uncomment below to use dns defined in env otherwise it will use the ones defined in the GUI
+      - FTLCONF_dns_upstreams=${PIHOLE_DNS}
+    volumes:
+      - ${PIHOLE_DIR}:/etc/pihole
+      - ${DNSMASQ_DIR}:/etc/dnsmasq.d
+    restart: unless-stopped
